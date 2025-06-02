@@ -38,6 +38,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www/html
+            - .:/var/www/html
+            - ./var/sessions:/tmp/sessions
     depends_on:
       - sqlserver

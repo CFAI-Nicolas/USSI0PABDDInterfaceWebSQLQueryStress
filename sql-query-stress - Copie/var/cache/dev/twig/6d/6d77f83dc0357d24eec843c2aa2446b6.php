@@ -74,10 +74,28 @@ class __TwigTemplate_d43542100baea7ca2d4938aa5b29c68e extends Template
 
         // line 4
         yield "<h1>Connexion SQL Server</h1>
+
+";
+        // line 6
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 6, $this->source); })()), "flashes", ["error"], "method", false, false, false, 6));
+        foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
+            // line 7
+            yield "    <div class=\"alert alert-danger\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
+            yield "</div>
+";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 9
+        yield "
 <form method=\"post\" action=\"";
-        // line 5
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("connect_sql");
+        // line 10
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login");
         yield "\">
+
     <label>Serveur :</label>
     <input type=\"text\" name=\"host\" value=\"sqlserver\" required><br>
 
@@ -126,7 +144,7 @@ class __TwigTemplate_d43542100baea7ca2d4938aa5b29c68e extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  79 => 5,  76 => 4,  63 => 3,  40 => 1,);
+        return array (  96 => 10,  93 => 9,  84 => 7,  80 => 6,  76 => 4,  63 => 3,  40 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -135,7 +153,13 @@ class __TwigTemplate_d43542100baea7ca2d4938aa5b29c68e extends Template
 
 {% block body %}
 <h1>Connexion SQL Server</h1>
-<form method=\"post\" action=\"{{ path('connect_sql') }}\">
+
+{% for message in app.flashes('error') %}
+    <div class=\"alert alert-danger\">{{ message }}</div>
+{% endfor %}
+
+<form method=\"post\" action=\"{{ path('app_login') }}\">
+
     <label>Serveur :</label>
     <input type=\"text\" name=\"host\" value=\"sqlserver\" required><br>
 

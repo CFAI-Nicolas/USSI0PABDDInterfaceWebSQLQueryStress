@@ -2,7 +2,13 @@
 
 {% block body %}
 <h1>Connexion SQL Server</h1>
-<form method="post" action="{{ path('connect_sql') }}">
+
+{% for message in app.flashes('error') %}
+    <div class="alert alert-danger">{{ message }}</div>
+{% endfor %}
+
+<form method="post" action="{{ path('app_login') }}">
+
     <label>Serveur :</label>
     <input type="text" name="host" value="sqlserver" required><br>
 

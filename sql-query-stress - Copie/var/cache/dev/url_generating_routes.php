@@ -18,7 +18,7 @@ return [
     '_profiler_exception' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::body'], [], [['text', '/exception'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     '_profiler_exception_css' => [['token'], ['_controller' => 'web_profiler.controller.exception_panel::stylesheet'], [], [['text', '/exception.css'], ['variable', '/', '[^/]++', 'token', true], ['text', '/_profiler']], [], [], []],
     'app_login' => [[], ['_controller' => 'App\\Controller\\MainController::login'], [], [['text', '/']], [], [], []],
-    'connect_sql' => [[], ['_controller' => 'App\\Controller\\MainController::connect'], [], [['text', '/connect']], [], [], []],
+    'app_query' => [[], ['_controller' => 'App\\Controller\\MainController::query'], [], [['text', '/query']], [], [], []],
     'App\Controller\MainController::login' => [[], ['_controller' => 'App\\Controller\\MainController::login'], [], [['text', '/']], [], [], []],
-    'App\Controller\MainController::connect' => [[], ['_controller' => 'App\\Controller\\MainController::connect'], [], [['text', '/connect']], [], [], []],
+    'App\Controller\MainController::query' => [[], ['_controller' => 'App\\Controller\\MainController::query'], [], [['text', '/query']], [], [], []],
 ];

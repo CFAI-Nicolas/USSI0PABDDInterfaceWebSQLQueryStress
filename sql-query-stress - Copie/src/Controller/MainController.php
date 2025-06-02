@@ -8,49 +8,85 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-
 final class MainController extends AbstractController
 {
     #[Route('/', name: 'app_login', methods: ['GET', 'POST'])]
-public function login(Request $request, SessionInterface $session): Response
-{
-    if ($request->isMethod('POST')) {
-        $server = $request->request->get('server');
-        $database = $request->request->get('database');
-        $username = $request->request->get('username');
-        $password = $request->request->get('password');
-
-        // Stocker les infos en session
-        $session->set('sql_config', compact('server', 'database', 'username', 'password'));
-
-        return $this->redirectToRoute('app_query');
+    public function login(Request $request, SessionInterface $session): Response
+    {
+        $error = null;
+    
+        if ($request->isMethod('POST')) {
+            $server = $request->request->get('host');
+            $port = $request->request->get('port');
+            $database = $request->request->get('database');
+            $username = $request->request->get('username');
+            $password = $request->request->get('password');
+    
+            $dsn = "sqlsrv:Server=$server,$port;Database=$database";
+    
+            try {
+                $pdo = new \PDO($dsn, $username, $password);
+                $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    
+                $session->set('sql_config', compact('server', 'port', 'database', 'username', 'password'));
+    
+                // ✔️ Redirection vers l'interface de requêtes
+                return $this->redirectToRoute('app_query');
+    
+            } catch (\PDOException $e) {
+                // ❌ Affiche l'erreur sur la vue
+                $error = 'Échec de connexion : ' . $e->getMessage();
+            }
+        }
+    
+        return $this->render('main/index.html.twig', [
+            'error' => $error
+        ]);
     }
+    
 
-    return $this->render('main/index.html.twig');
-}
+    #[Route('/query', name: 'app_query')]
+    public function query(Request $request, SessionInterface $session): Response
+    {
+        $sqlConfig = $session->get('sql_config');
+        if (!$sqlConfig) {
+            return $this->redirectToRoute('app_login');
+        }
 
-#[Route('/connect', name: 'connect_sql', methods: ['POST'])]
-public function connect(Request $request, SessionInterface $session): Response
-{
-    $host = $request->request->get('host');
-    $port = $request->request->get('port');
-    $db = $request->request->get('database');
-    $user = $request->request->get('username');
-    $pass = $request->request->get('password');
+        $results = [];
+        $durationTotal = 0;
+        $durationAvg = 0;
 
-    $dsn = "sqlsrv:Server=$host,$port;Database=$db";
+        if ($request->isMethod('POST')) {
+            $query = $request->request->get('query');
+            $count = (int) $request->request->get('count', 1);
+            $delay = (int) $request->request->get('delay', 0);
 
-    try {
-        $pdo = new \PDO($dsn, $user, $pass);
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        $session->set('sql_dsn', $dsn);
-        $session->set('sql_user', $user);
-        $session->set('sql_pass', $pass);
-        return $this->redirectToRoute('query_page');
-    } catch (\PDOException $e) {
-        return new Response('Échec de connexion : ' . $e->getMessage());
+            $dsn = "sqlsrv:Server={$sqlConfig['server']},{$sqlConfig['port']};Database={$sqlConfig['database']}";
+
+            try {
+                $pdo = new \PDO($dsn, $sqlConfig['username'], $sqlConfig['password']);
+                $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
+                $startAll = microtime(true);
+                for ($i = 0; $i < $count; $i++) {
+                    $stmt = $pdo->query($query);
+                    if ($stmt) {
+                        $results = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                    }
+                    usleep($delay * 1000); // délai en millisecondes
+                }
+                $durationTotal = microtime(true) - $startAll;
+                $durationAvg = $durationTotal / $count;
+            } catch (\PDOException $e) {
+                $this->addFlash('error', 'Erreur SQL : ' . $e->getMessage());
+            }
+        }
+
+        return $this->render('main/query.html.twig', [
+            'results' => $results,
+            'total' => $durationTotal,
+            'avg' => $durationAvg,
+        ]);
     }
-}
-
-
 }

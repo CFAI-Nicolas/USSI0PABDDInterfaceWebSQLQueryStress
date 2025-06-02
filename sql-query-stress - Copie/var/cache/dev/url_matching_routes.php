@@ -15,7 +15,7 @@ return [
         '/_profiler/xdebug' => [[['_route' => '_profiler_xdebug', '_controller' => 'web_profiler.controller.profiler::xdebugAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
         '/' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\MainController::login'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        '/connect' => [[['_route' => 'connect_sql', '_controller' => 'App\\Controller\\MainController::connect'], null, ['POST' => 0], null, false, false, null]],
+        '/query' => [[['_route' => 'app_query', '_controller' => 'App\\Controller\\MainController::query'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
