@@ -1,25 +1,53 @@
+## Build output
+bin/
+obj/
+out/
 
-###> symfony/framework-bundle ###
-/.env.local
-/.env.local.php
-/.env.*.local
-/config/secrets/prod/prod.decrypt.private.php
-/public/bundles/
-/var/
-/vendor/
-###< symfony/framework-bundle ###
+## VS Code / Rider / VS
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+.vs/
 
-###> phpunit/phpunit ###
-/phpunit.xml
-.phpunit.result.cache
-###< phpunit/phpunit ###
+## Logs / temp
+*.log
+*.tlog
+*.cache
+*.pdb
+*.pidb
 
-###> symfony/phpunit-bridge ###
-.phpunit.result.cache
-/phpunit.xml
-###< symfony/phpunit-bridge ###
+## ASP.NET specific
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+*.db
+*.db-shm
+*.db-wal
 
-###> symfony/asset-mapper ###
-/public/assets/
-/assets/vendor/
-###< symfony/asset-mapper ###
+## Certs
+*.pfx
+*.snk
+
+## Publish
+publish/
+wwwroot/dist/
+node_modules/
+npm-debug.log*
+
+## macOS/Linux artifacts
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Others
+*.bak
+*.old
+*.orig

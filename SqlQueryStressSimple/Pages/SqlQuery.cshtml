@@ -1,0 +1,66 @@
+@page
+@model SqlQueryModel
+@{
+    ViewData["Title"] = "Exécuter une requête SQL";
+}
+
+<h2>Exécuter une requête SQL</h2>
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p style="color:red">@Model.ErrorMessage</p>
+}
+
+<form method="post">
+    <div>
+        <label>Requête SQL :</label><br />
+        <textarea name="SqlText" rows="6" cols="80" required>@Model.SqlText</textarea>
+    </div>
+    <div>
+        <label>Nombre d'exécutions :</label>
+        <input type="number" name="ExecutionCount" value="@Model.ExecutionCount" min="1" required />
+    </div>
+    <div>
+        <label>Délai entre exécutions (ms) :</label>
+        <input type="number" name="DelayMs" value="@Model.DelayMs" min="0" required />
+    </div>
+    <div>
+        <label>Afficher les résultats :</label>
+        <input type="checkbox" name="ShowResults" checked="@Model.ShowResults" />
+    </div>
+    <button type="submit">Exécuter</button>
+</form>
+
+@if (Model.TotalDurationMs > 0)
+{
+    <hr />
+    <p>✅ Requête exécutée <strong>@Model.ExecutionCount</strong> fois</p>
+    <p>⏱ Temps total : <strong>@Model.TotalDurationMs</strong> ms</p>
+    <p>⏱ Temps moyen : <strong>@Model.AverageDurationMs</strong> ms</p>
+
+    @if (Model.QueryResults != null && Model.QueryResults.Any())
+    {
+        <h4>Résultats :</h4>
+        <table border="1">
+            <thead>
+                <tr>
+                    @foreach (var header in Model.QueryResults[0].Keys)
+                    {
+                        <th>@header</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in Model.QueryResults)
+                {
+                    <tr>
+                        @foreach (var value in row.Values)
+                        {
+                            <td>@value</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

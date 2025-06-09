@@ -1,0 +1,32 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Connexion SQL Server";
+}
+
+<h2>Connexion SQL Server</h2>
+
+<form method="post">
+    <div>
+        <label>Serveur :</label>
+        <input type="text" name="Server" value="@Model.Server" required />
+    </div>
+    <div>
+        <label>Base de données :</label>
+        <input type="text" name="Database" value="@Model.Database" required />
+    </div>
+    <div>
+        <label>Nom d'utilisateur :</label>
+        <input type="text" name="Username" value="@Model.Username" />
+    </div>
+    <div>
+        <label>Mot de passe :</label>
+        <input type="password" name="Password" />
+    </div>
+    <button type="submit">Se connecter</button>
+</form>
+
+@if (Model.Message != null)
+{
+    <p style="color:@(Model.IsSuccess ? "green" : "red")">@Model.Message</p>
+}
